@@ -38,11 +38,11 @@ app.get('/', function(req,res){
 	console.log('New visit!');
 
 	let user = {
-		browser: useragent.parse(req.header('user-agent')).family, // User Agent we get from headers, extract just browser
+		agent: useragent.parse(req.header('user-agent')).family, // User Agent we get from headers, extract just browser
 		referrer: req.header('referrer'), //  Likewise for referrer
 		ip: req.header('x-forwarded-for') || req.connection.remoteAddress, // Get IP - allow for proxy
 	};
-	handleNewData(user.browser, res);
+	handleNewData(user.ip, res);
 })
 
 app.get('*', function(req,res){
