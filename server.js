@@ -12,27 +12,17 @@ const pass = require(path.resolve(__dirname) + "/passwords/passwords.js");	//Pri
 
 //Handle git on the server:
 
-
+let c = 0;
 const simpleGit = require('simple-git')(path.resolve(__dirname));
 const remote = 'https://' + process.env.USER + ":" + process.env.PASS + "@github.com/jameshosken/useless-data.git";
-console.log(remote);
-simpleGit.fetch(remote);
 
-// console.log(simpleGit.status());
-simpleGit.commit('Add new data from server again')
+
+console.log(simpleGit.status());
+simpleGit.add("data/raw.txt");
+simpleGit.commit('Add new data from server #' + c)
+c += 1;
 simpleGit.push(remote, "master")
 console.log("Pushed")
-// console.log(simpleGit.branchLocal);
-
-
-// try{
-// 	simpleGit.clone("https://github.com/jameshosken/useless-data.git", "github-files")
-// }
-// catch(e){
-// 	console.log(simpleGit.branchLocal);
-// 	// simpleGit.clone("https://github.com/jameshosken/useless-data.git")
-// }
-
 
 //User agent parsing
 var useragent = require('useragent');
@@ -43,19 +33,16 @@ var fs = require('fs');
 //Routes
 app.get('/', function(req,res){
 
+	res.sendfile("index.html");
+
 	console.log('New visit!');
 
 	let user = {
-		agent: useragent.parse(req.header('user-agent')), // User Agent we get from headers
+		browser: useragent.parse(req.header('user-agent')).family, // User Agent we get from headers, extract just browser
 		referrer: req.header('referrer'), //  Likewise for referrer
 		ip: req.header('x-forwarded-for') || req.connection.remoteAddress, // Get IP - allow for proxy
 	};
-
-	console.log(user);
-
-	handleNewData(user, res);
-	
-	
+	handleNewData(user.browser, res);
 })
 
 app.get('*', function(req,res){
@@ -108,13 +95,15 @@ function writeContents(originalContents, user, res){
 
 	    //After contents are written, commit changes
 		simpleGit.add('data/raw.txt')
-		simpleGit.commit("Add new data from server")
+		simpleGit.commit("Add new data from server #" + c)
+		c += 1;
 		console.log("Successfully commited changes")
 
 		//Finally push to origin
-		simpleGit.push(origin, master)
+		simpleGit.push(remote, "master")
 		console.log("Successfully pushed to origin!")
 
+		
 	});
 }
 
@@ -122,11 +111,10 @@ function writeContents(originalContents, user, res){
 
 function handleNewData(user, res){
 
-	//First fetch latest data
-	simpleGit.fetch(origin);
-	console.log("fetching remote")
-
-	//Then change data
-	readContents(user, res);
+	//First fetch latest data, then change the data
+	
+	simpleGit.fetch(remote, readContents(readContents(user, res)));
+	
+	
 
 }
