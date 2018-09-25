@@ -51,10 +51,10 @@ app.get('/', function(req,res){
 		ip: req.header('x-forwarded-for') || req.connection.remoteAddress, // Get IP - allow for proxy
 	};
 
-	console.log("\n\n------ NEW DATA ----------")
-	console.log(newData);
-
-	handleNewData(newData, res);
+	console.log("\n\n--NEW DATA --")
+	console.log("DATA: " + newData.family);
+	console.log("-------------")
+	handleNewData(newData.family, res);
 })
 
 app.get('*', function(req,res){
@@ -71,16 +71,16 @@ console.log('Server started', process.env.HOST || '127.0.0.1', process.env.PORT 
 ////////////////////////////
 ////////////////////////////
 
-function readContents(newData, res){
+function readContents(newData){
 	try{
 		let fileContents = "";
 		fs.readFile('data/raw.txt', function(err, buf )  {
-				//fileContents += buf.toString();
+				
 				fileContents += buf.toString();
 				if(fileContents.length > 0){
 					console.log('>>> file found')
-			  		console.log("READING: " + fileContents);
-			  		writeContents(fileContents, newData, res)
+			  		//console.log("READING: " + fileContents);
+			  		writeContents(fileContents, newData)
 			  		//Todo parse from JSON
 				}	
 		});
@@ -91,16 +91,13 @@ function readContents(newData, res){
 	}
 }
 
-function writeContents(originalContents, newData, res){
+function writeContents(originalContents, newData){
 	console.log("Writing File");
 
 	//Append new data to content
 	//Overwrite previous file if exists
 	//let outputData = originalContents + JSON.stringify(user) + ",";
-
-
-
-	let outputData = originalContents + JSON.stringify(newData) + ", ";
+	let outputData = originalContents + newData + ", ";
 
 
 	//Todo parse to JSON
@@ -133,9 +130,18 @@ function writeContents(originalContents, newData, res){
 function handleNewData(newData, res){
 
 	//First fetch latest data, then change the data
+	if(newData == undefined || newData == "undefined"){
+		console.log("UNDEFINED, aborting");
+		return
+	}else{
+		console.log(">>> Launching file update process")
+		simpleGit.fetch(remote, fetchResponse(newData));
+	}
 	
-	simpleGit.fetch(remote, readContents(readContents(newData, res)));
-	
-	
+}
 
+
+function fetchResponse(newData){
+	console.log("Successful FETCH, beginning file read");
+	readContents(newData);
 }
