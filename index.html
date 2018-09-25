@@ -9,12 +9,32 @@
 
 	<title>Useless Data</title>
 
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 </head>
 <body>
 
-Whatzup!
+Whatzup yo!
+	<div id="data"></div>
+	
+	<script type="text/javascript">
+		
+		$(document).ready(function(){
+
+			// $.ajax({
+			// 	url: url,
+			// 	data: data,
+			// 	success: success,
+			// 	dataType: dataType
+			// });
+
+			$.get( "https://raw.githubusercontent.com/jameshosken/useless-data/master/LICENSE", function( data ) {
+				$( "#data" ).html( data );
+				alert( "Load was performed." );
+			});
 
 
+		})
+	</script>
 </body>
 </html>
