@@ -1,7 +1,6 @@
 let express = require('express')
 let app, server,
 	path = require('path'),
-    host = process.env.HOST || '127.0.0.1',
     port = process.env.PORT || 3000,
     public = path.resolve(__dirname + "/public");
 app = express();
@@ -51,7 +50,11 @@ app.get('*', function(req,res){
 })
 
 //Start server
-server = app.listen(port, host, serverStarted);
+server = app.listen(process.env.PORT || 3000);
+console.log('Server started', process.env.HOST || '127.0.0.1', process.env.PORT || 3000);
+    console.log('Root directory', public);
+    console.log('Press Ctrl+C to exit...\n');
+
 
 function writeContents(originalContents, user){
 	console.log("Writing File");
@@ -71,8 +74,3 @@ function writeContents(originalContents, user){
 	//This'll be easy, right?
 }
 
-function serverStarted () {
-    console.log('Server started', host, port);
-    console.log('Root directory', public);
-    console.log('Press Ctrl+C to exit...\n');
-}
