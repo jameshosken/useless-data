@@ -6,6 +6,27 @@ let app, server,
 app = express();
 app.use(express.static(public));
 
+//Handle git on the server:
+
+
+const simpleGit = require('simple-git')(path.resolve(__dirname));
+
+// console.log(simpleGit.status());
+simpleGit.commit('Add new data from server again')
+simpleGit.push("origin", "master")
+console.log("Pushed")
+// console.log(simpleGit.branchLocal);
+
+
+// try{
+// 	simpleGit.clone("https://github.com/jameshosken/useless-data.git", "github-files")
+// }
+// catch(e){
+// 	console.log(simpleGit.branchLocal);
+// 	// simpleGit.clone("https://github.com/jameshosken/useless-data.git")
+// }
+
+
 //User agent parsing
 var useragent = require('useragent');
 
@@ -25,24 +46,9 @@ app.get('/', function(req,res){
 
 	console.log(user);
 
-	try{
-		let fileContents = "";
-		fs.readFile('data/raw.txt', function(err, buf )  {
-				//fileContents += buf.toString();
-				fileContents += buf.toString();
-				if(fileContents.length > 0){
-					console.log('>>> file found')
-			  		console.log("READING: " + fileContents);
-			  		writeContents(fileContents, user)
-			  		//Todo parse from JSON
-				}	
-		});
-	}catch(e){
-		//No file?
-		console.log('>>> no file found')
-		writeContents("", user);
-	}
-	res.sendfile('index.html');
+	handleNewData(user, res);
+	
+	
 })
 
 app.get('*', function(req,res){
@@ -56,7 +62,30 @@ console.log('Server started', process.env.HOST || '127.0.0.1', process.env.PORT 
     console.log('Press Ctrl+C to exit...\n');
 
 
-function writeContents(originalContents, user){
+////////////////////////////
+////////////////////////////
+
+function readContents(user, res){
+	try{
+		let fileContents = "";
+		fs.readFile('data/raw.txt', function(err, buf )  {
+				//fileContents += buf.toString();
+				fileContents += buf.toString();
+				if(fileContents.length > 0){
+					console.log('>>> file found')
+			  		console.log("READING: " + fileContents);
+			  		writeContents(fileContents, user, res)
+			  		//Todo parse from JSON
+				}	
+		});
+	}catch(e){
+		//No file?
+		console.log('>>> no file found')
+		writeContents("", user);
+	}
+}
+
+function writeContents(originalContents, user, res){
 	console.log("Writing File");
 
 	//Append new data to content
@@ -68,9 +97,29 @@ function writeContents(originalContents, user){
 	    if (err) console.log(err);
 	    console.log("Successfully Written to File:");
 	    console.log(outputData);
-	});
 
-	//Todo commit new content to github and push to master.
-	//This'll be easy, right?
+
+	    //After contents are written, commit changes
+		simpleGit.add('data/raw.txt')
+		simpleGit.commit("Add new data from server")
+		console.log("Successfully commited changes")
+
+		//Finally push to origin
+		simpleGit.push(origin, master)
+		console.log("Successfully pushed to origin!")
+
+	});
 }
 
+
+
+function handleNewData(user, res){
+
+	//First fetch latest data
+	simpleGit.fetch(origin);
+	console.log("fetching remote")
+
+	//Then change data
+	readContents(user, res);
+
+}
