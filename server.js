@@ -7,8 +7,11 @@ let app, server,
 app = express();
 app.use(express.static(public));
 
-//Set env variables on server, uncomment this on local
- const pass = require(path.resolve(__dirname) + "/passwords/passwords.js");	//Private, excluded from git
+//Set env variables on server,  else look for passwords file on local
+var pass;
+if(port == 3000){
+ pass = require(path.resolve(__dirname) + "/passwords/passwords.js");	//Private, excluded from git
+}
 
 //Handle git on the server:
 
