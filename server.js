@@ -1,3 +1,4 @@
+
 let express = require('express')
 let app, server,
 	path = require('path'),
@@ -6,14 +7,20 @@ let app, server,
 app = express();
 app.use(express.static(public));
 
+
+const pass = require(path.resolve(__dirname) + "/passwords/passwords.js");	//Private, excluded from git
+
 //Handle git on the server:
 
 
 const simpleGit = require('simple-git')(path.resolve(__dirname));
+const remote = 'https://' + process.env.USER + ":" + process.env.PASS + "@github.com/jameshosken/useless-data.git";
+console.log(remote);
+simpleGit.fetch(remote);
 
 // console.log(simpleGit.status());
 simpleGit.commit('Add new data from server again')
-simpleGit.push("origin", "master")
+simpleGit.push(remote, "master")
 console.log("Pushed")
 // console.log(simpleGit.branchLocal);
 
