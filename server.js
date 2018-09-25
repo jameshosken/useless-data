@@ -1,3 +1,5 @@
+// CHANGE ME WHEN A
+let debugMode = false;
 
 let express = require('express')
 let app, server,
@@ -14,12 +16,9 @@ if(port == 3000){
 }
 
 //Handle git on the server:
-
-let c = 0;
+let c = 0;	//For commit messages
 const simpleGit = require('simple-git')(path.resolve(__dirname));
 const remote = 'https://' + process.env.USER + ":" + process.env.PASS + "@github.com/jameshosken/useless-data.git";
-
-let debugMode = true;
 
 if(debugMode){
 	console.log("Pretend Pushed")
