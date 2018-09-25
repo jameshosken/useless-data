@@ -19,6 +19,7 @@
   "homepage": "https://github.com/jameshosken/useless-data#readme",
   "dependencies": {
     "express": "^4.16.3",
-    "simple-git": "^1.102.0"
+    "simple-git": "^1.102.0",
+    "useragent": "^2.3.0"
   }
 }
