@@ -7,8 +7,8 @@ let app, server,
 app = express();
 app.use(express.static(public));
 
-
-const pass = require(path.resolve(__dirname) + "/passwords/passwords.js");	//Private, excluded from git
+//Set env variables on server, uncomment this on local
+// const pass = require(path.resolve(__dirname) + "/passwords/passwords.js");	//Private, excluded from git
 
 //Handle git on the server:
 
