@@ -1,1 +1,1 @@
-Data: Chrome, Edge, Edge, Chrome, Firefox, Edge, 
+Data: Chrome, Edge, Edge, Chrome, Firefox, Edge, Chrome Mobile, 
