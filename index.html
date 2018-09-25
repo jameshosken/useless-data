@@ -15,20 +15,16 @@
 <body>
 
 Whatzup yo!
+
 	<div id="data"></div>
 	
 	<script type="text/javascript">
 		
 		$(document).ready(function(){
 
-			// $.ajax({
-			// 	url: url,
-			// 	data: data,
-			// 	success: success,
-			// 	dataType: dataType
-			// });
 
-			$.get( "https://raw.githubusercontent.com/jameshosken/useless-data/master/LICENSE", function( data ) {
+			// URL for useless data repo
+			$.get( "https://raw.githubusercontent.com/jameshosken/useless-data/master/data/raw.txt", function( data ) {
 				$( "#data" ).html( data );
 				alert( "Load was performed." );
 			});

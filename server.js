@@ -66,6 +66,9 @@ function writeContents(originalContents, user){
 	    console.log("Successfully Written to File:");
 	    console.log(outputData);
 	});
+
+	//Todo commit new content to github and push to master.
+	//This'll be easy, right?
 }
 
 function serverStarted () {
