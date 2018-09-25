@@ -1,1 +1,1 @@
-Data: 
+Data: undefined,"family":"Edge","major":"17","minor":"17134","patch":"0","device":{"family":"Other","major":"0","minor":"0","patch":"0"},"os":{"family":"Windows","major":"10","minor":"0","patch":"0"}},"ip":"::1"},
