@@ -1,1 +1,1 @@
-Data: undefined,"Chrome",,"::1",ned,"::1",
+Data: "Chrome", "Edge", "Chrome", "Chrome"
